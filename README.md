@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Advanced Data Grid
+
+Production-grade virtualized data grid built from scratch with React 18+ and TypeScript.
+
+## Features
+
+- ✅ **50,000+ rows** with custom virtualization
+- ✅ **Sticky headers** with pinned left/right columns
+- ✅ **Custom cell renderers** for flexible data display
+- ✅ **60 FPS scrolling** performance
+- 🚧 Multi-column sorting
+- 🚧 Column resizing & reordering
+- 🚧 In-cell editing with async validation
+- 🚧 Full keyboard navigation & ARIA support
+
+## Tech Stack
+
+- **React 19** with TypeScript strict mode
+- **Next.js 16** (App Router)
+- **Tailwind CSS v4** with black/white design tokens
+- **Custom virtualization** (no external libraries)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the grid with 50,000 rows.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+components/DataGrid/
+├── DataGrid.tsx           # Main grid component
+├── types/index.ts         # TypeScript definitions
+├── hooks/
+│   └── useVirtualization.ts  # Custom virtualization logic
+└── utils/                 # Utility functions
+```
 
-## Learn More
+## Constraints
 
-To learn more about Next.js, take a look at the following resources:
+Built following strict requirements:
+- No component libraries (MUI, Radix, ShadCN, etc.)
+- No table/virtualization libraries (react-table, tanstack, react-window)
+- All logic implemented manually
+- TypeScript strict mode with `noUncheckedIndexedAccess`
+- Accessibility-first approach
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Performance
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Only visible rows rendered in DOM
+- Efficient scroll handling with ResizeObserver
+- Memoized calculations for optimal re-renders
+- Target: 60 FPS sustained scrolling
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
