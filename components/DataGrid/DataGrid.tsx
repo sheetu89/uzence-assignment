@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useRef, useState, useCallback, useMemo } from 'react';
 import { useVirtualization } from './hooks/useVirtualization';
 import type { DataGridProps, RowData, Column } from './types';
@@ -47,6 +45,16 @@ export function DataGrid<T extends RowData>({
     };
   }, [columns]);
 
+  const pinnedLeftWidth = useMemo(
+    () => pinnedLeftColumns.reduce((sum, col) => sum + (col.width ?? 150), 0),
+    [pinnedLeftColumns]
+  );
+
+  const pinnedRightWidth = useMemo(
+    () => pinnedRightColumns.reduce((sum, col) => sum + (col.width ?? 150), 0),
+    [pinnedRightColumns]
+  );
+
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     setScrollTop(target.scrollTop);
@@ -69,28 +77,23 @@ export function DataGrid<T extends RowData>({
     return () => resizeObserver.disconnect();
   }, [headerHeight]);
 
+  const scrollableWidth = useMemo(
+    () => Math.max(0, containerSize.width - pinnedLeftWidth - pinnedRightWidth),
+    [containerSize.width, pinnedLeftWidth, pinnedRightWidth]
+  );
+
   const { virtualState, totalHeight, totalWidth, visibleRowIndices, visibleColumnIndices } =
     useVirtualization({
       totalRows: data.length,
       columns: scrollableColumns,
       rowHeight,
       containerHeight: containerSize.height,
-      containerWidth: containerSize.width,
+      containerWidth: scrollableWidth,
       scrollTop,
       scrollLeft,
       overscanRowCount,
       overscanColumnCount,
     });
-
-  const pinnedLeftWidth = useMemo(
-    () => pinnedLeftColumns.reduce((sum, col) => sum + (col.width ?? 150), 0),
-    [pinnedLeftColumns]
-  );
-
-  const pinnedRightWidth = useMemo(
-    () => pinnedRightColumns.reduce((sum, col) => sum + (col.width ?? 150), 0),
-    [pinnedRightColumns]
-  );
 
   const renderCell = useCallback(
     (row: T, column: Column<T>, rowIndex: number, columnIndex: number) => {
